@@ -1,0 +1,31 @@
+# Agent Service Configuration
+# Copy to config.yaml and customize. All fields are required.
+
+# Filesystem path for the agent's working directory
+agent_working_dir: /home/user/agent-workspace
+
+# TLS certificate paths (mTLS — both server and client certs required)
+tls_cert: /etc/agent-service/certs/server.pem
+tls_key: /etc/agent-service/certs/server-key.pem
+tls_ca: /etc/agent-service/certs/ca.pem
+
+# OIDC configuration (GitHub as primary provider)
+oidc_issuer: https://token.actions.githubusercontent.com
+oidc_audience: agent-service
+authorized_subjects:
+  - "github-user-id-here"
+
+# Replay buffer — number of events retained for reconnect replay
+replay_buffer_size: 1000
+
+# Resume last session on startup (true) or start fresh (false)
+session_resume_on_startup: false
+
+# Bind address and port.
+#
+# This service is explicitly designed for remote access (mTLS + OIDC,
+# multi-client fan-out from dashboard + Discord bot). The python/subprocess-security
+# default of 127.0.0.1 (Rule 2) is deliberately overridden here. For production
+# deployments, prefer binding to a specific interface (e.g., the LAN IP)
+# rather than 0.0.0.0 wherever feasible.
+listen_address: "0.0.0.0:8443"
