@@ -53,5 +53,11 @@ make help           # Show all available targets
 
 ## Documentation
 
+- [Overview](docs/overview.md) — what this is, why it exists, how clients fit
+- [Setup Guide](docs/setup.md) — first-day setup: prereqs, certs, OIDC registration, configuration, verification
+- [Operations Guide](docs/operations.md) — day-2 ops: systemd, upgrade, rotation, multi-agent, backup, cost
+- [API Reference](docs/api.md) — REST and WebSocket protocol with auth, message schemas, and sequence diagrams
+- [Client Guide](docs/client-guide.md) — patterns for writing clients: connect, replay, reconnection, fan-out
+- [Development Guide](docs/development.md) — local dev environment without a full prod setup
 - [Test Plan](TEST_PLAN.md) — testing philosophy, categories, coverage goals
-- [Architecture Plan](Plan-remote-agent-service.md) — design and implementation plan
+- [step-ca Management (deferred)](docs/future/step-ca-management.md) — future plan for automated CA tooling
