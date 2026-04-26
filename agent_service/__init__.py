@@ -2,4 +2,4 @@
 
 """Agent Service — standalone FastAPI service hosting a Claude SDK agent."""
 
-__version__ = "0.1.0"
+__version__ = "0.2.0"
