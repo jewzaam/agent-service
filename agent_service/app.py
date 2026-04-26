@@ -38,9 +38,11 @@ async def lifespan(app: FastAPI):
     app.state.agent = AgentClient(
         working_dir=config.agent_working_dir,
         resume_on_startup=config.session_resume_on_startup,
-        on_event=app.state.ws_manager.broadcast,
+        on_event=lambda message: app.state.ws_manager.broadcast(message=message),
         metrics=app.state.metrics,
         agent_id=config.agent_working_dir.name,
+        chat_model=config.chat_model,
+        source_system=config.source_system,
     )
     await app.state.agent.start()
 

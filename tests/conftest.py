@@ -8,7 +8,7 @@ import shutil
 import subprocess
 import urllib.request
 from pathlib import Path
-from unittest.mock import patch
+from unittest.mock import AsyncMock, MagicMock, patch
 
 import pytest
 
@@ -108,3 +108,29 @@ def _block_real_filesystem(tmp_path: Path, monkeypatch: pytest.MonkeyPatch) -> N
 
     monkeypatch.setattr(shutil, "copy2", _guarded_shutil(shutil.copy2))
     monkeypatch.setattr(shutil, "move", _guarded_shutil(shutil.move))
+
+
+@pytest.fixture(autouse=True)
+def _mock_sdk_and_agentpulse(monkeypatch: pytest.MonkeyPatch) -> None:
+    """Default-mock the Claude SDK and disable AgentPulse forwarding.
+
+    Tests that exercise SDK behaviour can re-patch agent_service.agent.ClaudeSDKClient
+    to inject scripted message streams. Tests that want to verify AgentPulse
+    forwarding can re-patch load_agentpulse_endpoint and the post/seed functions.
+    """
+    import agent_service.agent as agent_mod
+
+    async def _empty_stream():
+        if False:
+            yield  # never reached — async generator stub
+
+    sdk_instance = MagicMock()
+    sdk_instance.connect = AsyncMock()
+    sdk_instance.disconnect = AsyncMock()
+    sdk_instance.query = AsyncMock()
+    sdk_instance.receive_messages = MagicMock(side_effect=_empty_stream)
+
+    sdk_class = MagicMock(return_value=sdk_instance)
+    monkeypatch.setattr(agent_mod, "ClaudeSDKClient", sdk_class)
+    monkeypatch.setattr(agent_mod, "load_agentpulse_endpoint", lambda *a, **k: None)
+    monkeypatch.setattr(agent_mod, "post_statusline", MagicMock(return_value=True))

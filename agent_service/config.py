@@ -27,6 +27,14 @@ class AgentServiceConfig(BaseModel):
     replay_buffer_size: int = Field(gt=0)
     session_resume_on_startup: bool
     listen_address: str
+    # Optional model pin. When unset, the SDK CLI's configured default is used
+    # (matches python/agent-sdk.md guidance). When set, pinned for every turn.
+    # Will become wirable via REST eventually.
+    chat_model: str | None = None
+    # Optional source_system identifier emitted in AgentPulse statusline payloads.
+    # When unset, defaults to socket.gethostname(). Override for container/cloud
+    # deployments where the hostname is an opaque pod ID.
+    source_system: str | None = None
 
     @field_validator("listen_address")
     @classmethod
