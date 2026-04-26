@@ -21,6 +21,15 @@ replay_buffer_size: 1000
 # Resume last session on startup (true) or start fresh (false)
 session_resume_on_startup: false
 
+# Optional: pin a specific Claude model (e.g. "claude-opus-4-7[1m]"). Leave
+# unset to defer to the SDK CLI's configured default.
+# chat_model: claude-opus-4-7[1m]
+
+# Optional: identifier emitted as `source_system` in AgentPulse statusline
+# payloads. Defaults to socket.gethostname(). Override in container/cloud
+# deployments where the hostname is an opaque pod ID.
+# source_system: my-agent-host
+
 # Bind address and port.
 #
 # This service is explicitly designed for remote access (mTLS + OIDC,
